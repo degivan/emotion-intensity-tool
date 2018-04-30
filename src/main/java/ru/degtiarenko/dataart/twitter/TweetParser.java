@@ -32,6 +32,6 @@ public class TweetParser {
         String id = jsonObject.getString("id_str");
         String text = jsonObject.getString("text");
 
-        return new Tweet(new DateTime(date), id, text); //TODO
+        return new Tweet(new DateTime(date), id, text);
     }
 }

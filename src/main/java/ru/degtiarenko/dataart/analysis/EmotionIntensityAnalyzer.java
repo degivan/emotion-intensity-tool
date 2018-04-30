@@ -1,4 +1,4 @@
-package ru.degtiarenko.dataart;
+package ru.degtiarenko.dataart.analysis;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

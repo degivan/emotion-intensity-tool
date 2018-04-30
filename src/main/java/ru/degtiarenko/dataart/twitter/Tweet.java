@@ -2,8 +2,9 @@ package ru.degtiarenko.dataart.twitter;
 
 
 import org.joda.time.DateTime;
+import ru.degtiarenko.dataart.common.TextData;
 
-public class Tweet {
+public class Tweet implements TextData{
     private final DateTime date;
     private final String id;
     private final String text;
