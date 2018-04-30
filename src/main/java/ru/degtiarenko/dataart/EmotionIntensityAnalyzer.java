@@ -3,10 +3,13 @@ package ru.degtiarenko.dataart;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
+import ru.degtiarenko.dataart.twitter.Tweet;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Client wraper for analyzer server.
@@ -19,6 +22,18 @@ public class EmotionIntensityAnalyzer {
         this.analyzerUrl = analyzerUrl;
     }
 
+    public List<Map<Emotion, Double>> predictIntensity(List<Tweet> tweets) {
+        return tweets.stream()
+                .map(tweet -> {
+                    try {
+                        return predictIntensity(tweet);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                }).collect(Collectors.toList());
+    }
+
     public Map<Emotion, Double> predictIntensity(Tweet tweet) throws IOException {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("tweet", tweet.getText());
@@ -28,7 +43,7 @@ public class EmotionIntensityAnalyzer {
                 .ignoreContentType(true)
                 .get()
                 .body()
-                .text(); //TODO: change jsoup for json-something
+                .text();
 
         return extractIntensities(json);
     }
