@@ -6,6 +6,8 @@ import org.joda.time.DateTime;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class SearchServiceImpl implements SearchService {
     private static final String AUTH_PREFIX = "Bearer ";
@@ -18,9 +20,9 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public List<Tweet> getTweetsWithHashTag(String hashTag, DateTime since) throws ParseException, UnirestException {
+    public List<Tweet> getTweetsWithQuery(String query, DateTime since) throws ParseException, UnirestException {
         DateTime lastTweetTime = new DateTime();
-        TweetWalker tweetWalker = new TweetWalker(hashTag, authValue, searchUrl);
+        TweetWalker tweetWalker = new TweetWalker(query, authValue, searchUrl);
         List<Tweet> tweets = new ArrayList<>();
         while (lastTweetTime.isAfter(since)) {
             List<Tweet> newTweets = tweetWalker.getNextTweets();
@@ -30,6 +32,9 @@ public class SearchServiceImpl implements SearchService {
             lastTweetTime = newTweets.get(newTweets.size() - 1).getDate();
             tweets.addAll(newTweets);
         }
+        tweets = tweets.stream()
+                .distinct()
+                .collect(Collectors.toList());
         return tweets;
     }
 }

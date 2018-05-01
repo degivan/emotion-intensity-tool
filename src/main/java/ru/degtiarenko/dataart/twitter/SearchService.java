@@ -7,5 +7,5 @@ import java.text.ParseException;
 import java.util.List;
 
 public interface SearchService {
-    List<Tweet> getTweetsWithHashTag(String hashTag, DateTime since) throws ParseException, UnirestException;
+    List<Tweet> getTweetsWithQuery(String query, DateTime since) throws ParseException, UnirestException;
 }

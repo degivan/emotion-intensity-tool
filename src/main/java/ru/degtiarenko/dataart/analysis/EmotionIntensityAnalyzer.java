@@ -22,11 +22,11 @@ public class EmotionIntensityAnalyzer {
         this.analyzerUrl = analyzerUrl;
     }
 
-    public List<Map<Emotion, Double>> predictIntensity(List<Tweet> tweets) {
+    public List<AnalysedTweet> analyseTweets(List<Tweet> tweets) {
         return tweets.stream()
                 .map(tweet -> {
                     try {
-                        return predictIntensity(tweet);
+                        return new AnalysedTweet(countIntensity(tweet), tweet);
                     } catch (IOException e) {
                         e.printStackTrace();
                         return null;
@@ -34,7 +34,7 @@ public class EmotionIntensityAnalyzer {
                 }).collect(Collectors.toList());
     }
 
-    public Map<Emotion, Double> predictIntensity(Tweet tweet) throws IOException {
+    public Map<Emotion, Double> countIntensity(Tweet tweet) throws IOException {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("tweet", tweet.getText());
 
