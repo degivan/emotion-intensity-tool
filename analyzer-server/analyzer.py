@@ -2,9 +2,14 @@ import flask
 import numpy as np
 from keras import backend as K
 from keras.models import load_model
+from keras.preprocessing import sequence
+from keras.preprocessing.text import Tokenizer
+import pickle
 
 app = flask.Flask('analyzer')
 models = {}
+tokenizer = None
+max_sent_len = 50
 
 
 def pearson_correlation_f(y_true, y_pred):
@@ -20,10 +25,11 @@ def pearson_correlation_f(y_true, y_pred):
 
 
 def load():  # TODO
-    global vectorizer
-    global doc2vec_model
+    global tokenizer
     global models
     K.clear_session()
+    with open('IMS-EmoInt/keras_regression/tokenizer.pickle', 'rb') as handle:
+        tokenizer = pickle.load(handle)
     for i in 'anger joy sadness fear'.split():
         model = load_model('IMS-EmoInt/keras_regression/models/%s.h5' % str(i))
         model._make_predict_function()
@@ -34,7 +40,8 @@ def load():  # TODO
 
 # TODO
 def extract_features(text):
-    return np.ones((1, 50))
+    text_sequence = sequence.pad_sequences(tokenizer.texts_to_sequences([text]), maxlen=max_sent_len)
+    return text_sequence
 
 
 @app.route("/predict", methods=["POST"])
