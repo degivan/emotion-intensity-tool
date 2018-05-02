@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
+import org.springframework.stereotype.Service;
 import ru.degtiarenko.dataart.common.TextData;
 
 import java.io.IOException;
@@ -15,6 +16,7 @@ import java.util.Map;
 /**
  * Client wraper for analyzer server.
  */
+@Service
 public class EmotionIntensityAnalyzer {
 
     private final String analyzerUrl;

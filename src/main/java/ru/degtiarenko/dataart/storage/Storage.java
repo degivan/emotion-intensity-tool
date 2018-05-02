@@ -1,5 +1,8 @@
 package ru.degtiarenko.dataart.storage;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public interface Storage<T> {
     Iterable<T> findAll();
     Iterable<String> findAllIds();

@@ -6,15 +6,14 @@ import org.joda.time.DateTime;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
-public class SearchServiceImpl implements SearchService {
+public class TweetSearchServiceImpl implements TweetSearchService {
     private static final String AUTH_PREFIX = "Bearer ";
     private final String authValue;
     private final String searchUrl;
 
-    public SearchServiceImpl(String bearerToken, String searchUrl) {
+    public TweetSearchServiceImpl(String bearerToken, String searchUrl) {
         this.authValue = AUTH_PREFIX + bearerToken;
         this.searchUrl = searchUrl;
     }
