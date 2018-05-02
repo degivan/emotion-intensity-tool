@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.degtiarenko.dataart.common.TextData;
 
@@ -18,10 +19,9 @@ import java.util.Map;
  */
 @Service
 public class EmotionIntensityAnalyzer {
-
     private final String analyzerUrl;
 
-    public EmotionIntensityAnalyzer(String analyzerUrl) {
+    public EmotionIntensityAnalyzer(@Value("${analyzer_url}") String analyzerUrl) {
         this.analyzerUrl = analyzerUrl;
     }
 

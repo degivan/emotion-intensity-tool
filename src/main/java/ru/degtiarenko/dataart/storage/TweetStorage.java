@@ -5,6 +5,7 @@ import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 import org.jooq.util.maven.example.tables.Tweets;
 import org.jooq.util.maven.example.tables.records.TweetsRecord;
+import org.springframework.stereotype.Component;
 import ru.degtiarenko.dataart.analysis.AnalysedData;
 import ru.degtiarenko.dataart.analysis.TweetToRecordConverter;
 import ru.degtiarenko.dataart.twitter.Tweet;
@@ -15,6 +16,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Component
 public class TweetStorage implements Storage<AnalysedData<Tweet>> {
     private Connection conn = DriverManager.getConnection("jdbc:postgresql:eitool", "eitool", "eitool");
     private DSLContext dslContext = DSL.using(conn, SQLDialect.POSTGRES);

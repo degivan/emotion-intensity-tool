@@ -3,6 +3,7 @@ package ru.degtiarenko.dataart;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ru.degtiarenko.dataart.analysis.AnalysedData;
 import ru.degtiarenko.dataart.analysis.EmotionIntensityAnalyzer;
 import ru.degtiarenko.dataart.storage.TweetStorage;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
 
+@Service
 public class LoadTweetServiceImpl implements LoadTweetService {
     @Autowired
     private TweetSearchService searchService;

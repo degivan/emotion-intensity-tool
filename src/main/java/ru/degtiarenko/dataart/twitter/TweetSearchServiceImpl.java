@@ -2,18 +2,22 @@ package ru.degtiarenko.dataart.twitter;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.joda.time.DateTime;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 public class TweetSearchServiceImpl implements TweetSearchService {
     private static final String AUTH_PREFIX = "Bearer ";
     private final String authValue;
     private final String searchUrl;
 
-    public TweetSearchServiceImpl(String bearerToken, String searchUrl) {
+    public TweetSearchServiceImpl(@Value("${bearer_token}") String bearerToken,
+                                  @Value("${search_url}")  String searchUrl) {
         this.authValue = AUTH_PREFIX + bearerToken;
         this.searchUrl = searchUrl;
     }

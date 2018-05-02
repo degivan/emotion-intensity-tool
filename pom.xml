@@ -120,12 +120,6 @@
             <artifactId>joda-time</artifactId>
             <version>2.9.9</version>
         </dependency>
-
-        <dependency>
-            <groupId>com.cognifide.securecq</groupId>
-            <artifactId>secure-cq</artifactId>
-            <version>1.0.1</version>
-        </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
@@ -150,12 +144,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
             <version>2.0.1.RELEASE</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>ch.qos.logback</groupId>
-                    <artifactId>logback-classic</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
     </dependencies>
 
