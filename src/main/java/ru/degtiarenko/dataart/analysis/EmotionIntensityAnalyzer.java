@@ -4,7 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
-import ru.degtiarenko.dataart.twitter.Tweet;
+import ru.degtiarenko.dataart.common.TextData;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,22 +23,22 @@ public class EmotionIntensityAnalyzer {
         this.analyzerUrl = analyzerUrl;
     }
 
-    public List<AnalysedTweet> analyseTweets(List<Tweet> tweets) throws IOException {
+    public <T extends TextData> List<AnalysedData<T>> analyseData(List<T> tweets) throws IOException {
         List<Map<Emotion, Double>> intensities = countIntensity(tweets);
 
-        List<AnalysedTweet> result = new ArrayList<>();
+        List<AnalysedData<T>> result = new ArrayList<>();
         for (int i = 0; i < Math.max(intensities.size(), tweets.size()); i++) {
-            Tweet tweet = tweets.get(i);
+            T tweet = tweets.get(i);
             Map<Emotion, Double> intensity = intensities.get(i);
-            result.add(new AnalysedTweet(intensity, tweet));
+            result.add(new AnalysedData<>(intensity, tweet));
         }
         return result;
     }
 
-    private List<Map<Emotion, Double>> countIntensity(List<Tweet> tweets) throws IOException {
+    private <T extends TextData> List<Map<Emotion, Double>> countIntensity(List<T> tweets) throws IOException {
         JSONObject request = new JSONObject();
         JSONArray jsonTweets = new JSONArray();
-        for(Tweet tweet : tweets) {
+        for(TextData tweet : tweets) {
             Map<String, String> jsonTweet = new HashMap<>();
             jsonTweet.put("text", tweet.getText());
             jsonTweets.put(jsonTweet);

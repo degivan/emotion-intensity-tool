@@ -10,14 +10,13 @@ import java.sql.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AnalysedTweet extends AnalysedData<Tweet> {
+public class TweetToRecordConverter {
     private static final double DEFAULT_INTENSITY = 0.0;
 
-    protected AnalysedTweet(Map<Emotion, Double> emotionIntensities, Tweet tweet) {
-        super(emotionIntensities, tweet);
-    }
+    private TweetToRecordConverter() {}
 
-    public static AnalysedTweet from(TweetsRecord tweetsRecord) {
+
+    public static AnalysedData<Tweet> from(TweetsRecord tweetsRecord) {
         String jsonIntensities = tweetsRecord.getIntensities();
         Date postedAt = tweetsRecord.getPostedAt();
         String text = tweetsRecord.getText();
@@ -28,7 +27,7 @@ public class AnalysedTweet extends AnalysedData<Tweet> {
         Tweet tweet = new Tweet(date, recordId, text);
         Map<Emotion, Double> emotionIntensities = extractIntensitiesFromJson(jsonIntensities);
 
-        return new AnalysedTweet(emotionIntensities, tweet);
+        return new AnalysedData<>(emotionIntensities, tweet);
     }
 
     private static Map<Emotion, Double> extractIntensitiesFromJson(String jsonIntensities) {
@@ -42,7 +41,7 @@ public class AnalysedTweet extends AnalysedData<Tweet> {
         return emotionIntensities;
     }
 
-    public static TweetsRecord toRecord(AnalysedTweet tweet) {
+    public static TweetsRecord toRecord(AnalysedData<Tweet> tweet) {
         TweetsRecord record = new TweetsRecord();
         String id = tweet.getData().getId();
         String text = tweet.getData().getText();

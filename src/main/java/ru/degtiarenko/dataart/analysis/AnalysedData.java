@@ -4,7 +4,7 @@ import ru.degtiarenko.dataart.common.TextData;
 
 import java.util.Map;
 
-public abstract class AnalysedData<T extends TextData> {
+public class AnalysedData<T extends TextData> {
     protected final Map<Emotion, Double> emotionIntensities;
     protected final T textData;
 

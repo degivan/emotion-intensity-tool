@@ -2,7 +2,7 @@ package ru.degtiarenko.dataart;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.joda.time.DateTime;
-import ru.degtiarenko.dataart.analysis.AnalysedTweet;
+import ru.degtiarenko.dataart.analysis.AnalysedData;
 import ru.degtiarenko.dataart.analysis.EmotionIntensityAnalyzer;
 import ru.degtiarenko.dataart.storage.TweetStorage;
 import ru.degtiarenko.dataart.twitter.SearchService;
@@ -42,10 +42,8 @@ public class EmotionIntensityTool {
 
         DateTime since = new DateTime().minusHours(24);
         List<Tweet> tweets = tweetSearchService.getTweetsWithQuery(HTC, since);
-        List<AnalysedTweet> results = analyzer.analyseTweets(tweets);
+        List<AnalysedData<Tweet>> results = analyzer.analyseData(tweets);
 
         tweetStorage.create(results);
-
-        System.out.println(results);
     }
 }
