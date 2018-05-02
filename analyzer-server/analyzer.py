@@ -4,7 +4,7 @@ from keras import backend as K
 from keras.models import load_model
 
 app = flask.Flask('analyzer')
-model = None
+models = {}
 
 
 def pearson_correlation_f(y_true, y_pred):
@@ -22,27 +22,35 @@ def pearson_correlation_f(y_true, y_pred):
 def load():  # TODO
     global vectorizer
     global doc2vec_model
-    global model
+    global models
     K.clear_session()
-    model = load_model('/home/vanyadeg/dev/diploma/tweet_emotions/nn_0.6396_joy.h5',
-                       custom_objects={'pearson_correlation_f': pearson_correlation_f})
-    model._make_predict_function()
-    print(model.summary())
+    for i in 'anger joy sadness fear'.split():
+        model = load_model('IMS-EmoInt/keras_regression/models/%s.h5' % str(i))
+        model._make_predict_function()
+        models[str(i)] = model
+    print('EMOTIONS:')
+    print(models.keys())
+
 
 # TODO
 def extract_features(text):
-    return np.zeros((1, 3791))
+    return np.ones((1, 50))
 
 
-@app.route("/predict", methods=["GET"])
+@app.route("/predict", methods=["POST"])
 def predict():
     data = {"success": False}
-    text = flask.request.args.get('tweet', '')
-    preds = model.predict(extract_features(text))
-    print(preds)
-    data["predictions"] = [preds.tolist()[0][2]]
+    json = flask.request.get_json()
+    predictions = []
+    for tweet in json['tweets']:
+        text = tweet['text']
+        preds = {}
+        for emotion in models.keys():
+            res = models[emotion].predict(extract_features(text))
+            preds[emotion] = res[0][0].item()
+        predictions.append(preds)
+    data["predictions"] = predictions
     data["success"] = True
-    print(data)
     return flask.jsonify(data)
 
 
