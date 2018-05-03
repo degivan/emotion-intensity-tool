@@ -28,6 +28,10 @@ public class LoadController {
     @GetMapping("/load_tweets")
     public List<AnalysedData<Tweet>> loadTweets(@RequestParam String query, int lastHours) throws Exception {
         List<AnalysedData<Tweet>> result = loadTweetService.loadAndAnalyse(query, lastHours);
+        return extractMinMax(result);
+    }
+
+    private List<AnalysedData<Tweet>> extractMinMax(List<AnalysedData<Tweet>> result) {
         List<AnalysedData<Tweet>> minAndMax = new ArrayList<>();
         Comparator<AnalysedData<Tweet>> joyComparator = Comparator.comparingDouble(at -> at.getEmotionIntensities().get(JOY));
         minAndMax.add(
@@ -40,6 +44,11 @@ public class LoadController {
                         .max(joyComparator)
                         .get()
         );
+        for(AnalysedData<Tweet> tweet: minAndMax) {
+            tweet.getEmotionIntensities().remove(ANGER);
+            tweet.getEmotionIntensities().remove(SADNESS);
+            tweet.getEmotionIntensities().remove(FEAR);
+        }
         return minAndMax;
     }
 
