@@ -28,8 +28,8 @@ public class LoadTweetServiceImpl implements LoadTweetService {
     }
 
     @Override
-    public List<AnalysedData<Tweet>> loadAndAnalyse(String query) throws IOException, ParseException, UnirestException {
-        DateTime since = new DateTime().minusHours(24);
+    public List<AnalysedData<Tweet>> loadAndAnalyse(String query, int lastHours) throws IOException, ParseException, UnirestException {
+        DateTime since = new DateTime().minusHours(lastHours);
         List<Tweet> tweets = searchService.getTweetsWithQuery(query, since);
         List<AnalysedData<Tweet>> results = analyzer.analyseData(tweets);
 
