@@ -1,4 +1,4 @@
-package ru.degtiarenko.dataart;
+package ru.degtiarenko.dataart.twitter;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.joda.time.DateTime;
@@ -7,8 +7,6 @@ import org.springframework.stereotype.Service;
 import ru.degtiarenko.dataart.analysis.AnalysedData;
 import ru.degtiarenko.dataart.analysis.EmotionIntensityAnalyzer;
 import ru.degtiarenko.dataart.storage.TweetStorage;
-import ru.degtiarenko.dataart.twitter.Tweet;
-import ru.degtiarenko.dataart.twitter.TweetSearchService;
 
 import java.io.IOException;
 import java.text.ParseException;

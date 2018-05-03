@@ -1,4 +1,4 @@
-package ru.degtiarenko.dataart;
+package ru.degtiarenko.dataart.twitter;
 
 import ru.degtiarenko.dataart.analysis.AnalysedData;
 import ru.degtiarenko.dataart.twitter.Tweet;
