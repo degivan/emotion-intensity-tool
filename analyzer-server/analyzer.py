@@ -5,6 +5,7 @@ from keras.models import load_model
 from keras.preprocessing import sequence
 from keras.preprocessing.text import Tokenizer
 import pickle
+import atexit
 
 app = flask.Flask('analyzer')
 models = {}
@@ -12,19 +13,7 @@ tokenizer = None
 max_sent_len = 50
 
 
-def pearson_correlation_f(y_true, y_pred):
-    fsp = y_pred - K.mean(y_pred, axis=-1, keepdims=True)
-    fst = y_true - K.mean(y_true, axis=-1, keepdims=True)
-
-    devP = K.std(y_pred)
-    devT = K.std(y_true)
-
-    val = K.mean(fsp * fst) / (devP * devT)
-
-    return 1 - val
-
-
-def load():  # TODO
+def load():
     global tokenizer
     global models
     K.clear_session()
@@ -38,7 +27,6 @@ def load():  # TODO
     print(models.keys())
 
 
-# TODO
 def extract_features(text):
     text_sequence = sequence.pad_sequences(tokenizer.texts_to_sequences([text]), maxlen=max_sent_len)
     return text_sequence
@@ -61,7 +49,26 @@ def predict():
     return flask.jsonify(data)
 
 
+@app.route("/train", methods=["POST"])
+def train():
+    data = {"success": False}
+    json = flask.request.get_json()
+    text = json['text']
+    seq = extract_features(text)
+    for emotion in models.keys():
+        label = float(json[emotion])
+        models[emotion].fit(seq, [label])
+    data["success"] = True
+    return flask.jsonify(data)
+
+
+def shutdown():
+    for i in 'anger joy sadness fear'.split():
+        models[str(i)].save('IMS-EmoInt/keras_regression/models/%s.h5' % str(i))
+
+
 load()
+atexit.register(shutdown)
 
 if __name__ == "__main__":
     app.run()

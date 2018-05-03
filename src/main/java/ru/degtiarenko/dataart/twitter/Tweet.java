@@ -1,10 +1,12 @@
 package ru.degtiarenko.dataart.twitter;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.joda.time.DateTime;
 import ru.degtiarenko.dataart.common.TextData;
 
 public class Tweet implements TextData{
+    @JsonIgnore
     private final DateTime date;
     private final String id;
     private final String text;
