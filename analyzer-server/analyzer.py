@@ -12,7 +12,9 @@ models = {}
 tokenizers = {}
 max_sent_len = 36
 cl_from_emotion = {'anger': 0, 'sadness': 1, 'joy': 2, 'fear': 3}
-emotion_coeff = {'anger': 0.25, 'sadness': 0.25, 'joy': 0.0, 'fear': 0.3}
+emotion_coeff = {'anger': 0.3, 'sadness': 0.3, 'joy': 1.5, 'fear': 0.1}
+position_from_emotion = {'anger': [1, 0, 0, 0], 'sadness': [0, 1, 0, 0], 'joy': [0, 0, 1, 0], 'fear': [0, 0, 0, 1]}
+
 
 def load():
     global tokenizers
@@ -43,7 +45,8 @@ def predict():
         preds = {}
         for emotion in models.keys():
             res = models[emotion].predict(extract_features(text, emotion))
-            preds[emotion] = res[0][cl_from_emotion[emotion]].item() - emotion_coeff[emotion]
+            extracted_res = res[0][cl_from_emotion[emotion]].item() * emotion_coeff[emotion]
+            preds[emotion] = extracted_res
         predictions.append(preds)
     data["predictions"] = predictions
     data["success"] = True
@@ -57,8 +60,9 @@ def train():
     text = json['text']
     for emotion in models.keys():
         seq = extract_features(text, emotion)
-        label = float(json[emotion])
-        models[emotion].fit(seq, [label])
+        val = float(json[emotion])
+        label = [val * x for x in position_from_emotion[emotion]]
+        models[emotion].fit(seq, np.array([label]))
     data["success"] = True
     return flask.jsonify(data)
 
