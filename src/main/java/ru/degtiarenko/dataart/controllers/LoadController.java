@@ -36,15 +36,15 @@ public class LoadController {
         Comparator<AnalysedData<Tweet>> joyComparator = Comparator.comparingDouble(at -> at.getEmotionIntensities().get(JOY));
         minAndMax.add(
                 result.stream()
-                    .min(joyComparator)
-                    .get()
+                        .min(joyComparator)
+                        .get()
         );
         minAndMax.add(
                 result.stream()
                         .max(joyComparator)
                         .get()
         );
-        for(AnalysedData<Tweet> tweet: minAndMax) {
+        for (AnalysedData<Tweet> tweet : minAndMax) {
             tweet.getEmotionIntensities().remove(ANGER);
             tweet.getEmotionIntensities().remove(SADNESS);
             tweet.getEmotionIntensities().remove(FEAR);
