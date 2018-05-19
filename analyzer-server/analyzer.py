@@ -12,7 +12,7 @@ models = {}
 tokenizers = {}
 max_sent_len = 36
 cl_from_emotion = {'anger': 0, 'sadness': 1, 'joy': 2, 'fear': 3}
-emotion_coeff = {'anger': 0.3, 'sadness': 0.3, 'joy': 1.5, 'fear': 0.1}
+emotion_coeff = {'anger': 0.5, 'sadness': 0.5, 'joy': 1.0, 'fear': 0.4}
 position_from_emotion = {'anger': [1, 0, 0, 0], 'sadness': [0, 1, 0, 0], 'joy': [0, 0, 1, 0], 'fear': [0, 0, 0, 1]}
 
 
@@ -23,7 +23,7 @@ def load():
     for i in 'anger joy sadness fear'.split():
         with open('networks/tokenizer_%s.pickle' % str(i), 'rb') as handle:
             tokenizers[str(i)] = pickle.load(handle)
-        model = load_model('networks/%s.h5' % str(i))
+        model = load_model('networks/best_model_%s.h5' % str(i))
         model._make_predict_function()
         models[str(i)] = model
     print('EMOTIONS:')
@@ -31,7 +31,7 @@ def load():
 
 
 def extract_features(text, emotion):
-    text_sequence = sequence.pad_sequences(tokenizers[emotion].texts_to_sequences([text]), maxlen=36)
+    text_sequence = sequence.pad_sequences(tokenizers[emotion].texts_to_sequences([text]), maxlen=52)
     return text_sequence
 
 
@@ -45,7 +45,7 @@ def predict():
         preds = {}
         for emotion in models.keys():
             res = models[emotion].predict(extract_features(text, emotion))
-            extracted_res = res[0][cl_from_emotion[emotion]].item() * emotion_coeff[emotion]
+            extracted_res = res[0][cl_from_emotion[emotion]].item() # * emotion_coeff[emotion]
             preds[emotion] = extracted_res
         predictions.append(preds)
     data["predictions"] = predictions
